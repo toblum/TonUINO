@@ -6,7 +6,7 @@
 #include <SoftwareSerial.h>
 
 // DFPlayer Mini
-SoftwareSerial mySoftwareSerial(2, 3); // RX, TX
+SoftwareSerial mySoftwareSerial(9, 8); // RX, TX
 uint16_t numTracksInFolder;
 uint16_t currentTrack;
 
@@ -166,9 +166,9 @@ byte blockAddr = 4;
 byte trailerBlock = 7;
 MFRC522::StatusCode status;
 
-#define buttonPause A0
-#define buttonUp A1
-#define buttonDown A2
+#define buttonPause A3
+#define buttonUp A5
+#define buttonDown A4
 #define busyPin 4
 
 #define LONG_PRESS 1000
@@ -203,7 +203,7 @@ void setup() {
 
   // DFPlayer Mini initialisieren
   mp3.begin();
-  mp3.setVolume(15);
+  mp3.setVolume(28);
 
   // NFC Leser initialisieren
   SPI.begin();        // Init SPI bus
@@ -345,8 +345,21 @@ void loop() {
 
 int voiceMenu(int numberOfOptions, int startMessage, int messageOffset,
               bool preview = false, int previewFromFolder = 0) {
+
+  Serial.print(F("voiceMenu numberOfOptions "));
+  Serial.print(numberOfOptions);
+  Serial.print(F(" - startMessage "));
+  Serial.print(startMessage);
+  Serial.print(F(" - messageOffset "));
+  Serial.print(messageOffset);
+  Serial.print(F(" - preview "));
+  Serial.print(preview);
+  Serial.print(F(" - previewFromFolder "));
+  Serial.println(previewFromFolder);
+
   int returnValue = 0;
   if (startMessage != 0)
+    Serial.print(F("mp3.playMp3FolderTrack(startMessage) "));
     mp3.playMp3FolderTrack(startMessage);
   do {
     pauseButton.read();
@@ -354,12 +367,14 @@ int voiceMenu(int numberOfOptions, int startMessage, int messageOffset,
     downButton.read();
     mp3.loop();
     if (pauseButton.wasPressed()) {
+      Serial.println(F("PAUSE"));
       if (returnValue != 0)
         return returnValue;
       delay(1000);
     }
 
     if (upButton.pressedFor(LONG_PRESS)) {
+      Serial.println(F("UP LONG"));
       returnValue = min(returnValue + 10, numberOfOptions);
       mp3.playMp3FolderTrack(messageOffset + returnValue);
       delay(1000);
@@ -374,6 +389,7 @@ int voiceMenu(int numberOfOptions, int startMessage, int messageOffset,
       }
       ignoreUpButton = true;
     } else if (upButton.wasReleased()) {
+      Serial.println(F("UP RELEASED"));
       if (!ignoreUpButton) {
         returnValue = min(returnValue + 1, numberOfOptions);
         mp3.playMp3FolderTrack(messageOffset + returnValue);
@@ -392,6 +408,7 @@ int voiceMenu(int numberOfOptions, int startMessage, int messageOffset,
     }
     
     if (downButton.pressedFor(LONG_PRESS)) {
+      Serial.println(F("DOWN LONG"));
       returnValue = max(returnValue - 10, 1);
       mp3.playMp3FolderTrack(messageOffset + returnValue);
       delay(1000);
@@ -406,6 +423,7 @@ int voiceMenu(int numberOfOptions, int startMessage, int messageOffset,
       }
       ignoreDownButton = true;
     } else if (downButton.wasReleased()) {
+      Serial.println(F("DOWN RELEASED"));
       if (!ignoreDownButton) {
         returnValue = max(returnValue - 1, 1);
         mp3.playMp3FolderTrack(messageOffset + returnValue);
