@@ -1,5 +1,7 @@
 # TonUINO
-Die DIY Musikbox (nicht nur) für Kinder
+Die DIY Musikbox (nicht nur) für Kinder, siehe https://www.voss.earth/tonuino/
+
+Gepatchte Version, passend für das Blumbert Board, mit platform.io Support.
 
 
 # Change Log
