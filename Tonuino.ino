@@ -16,7 +16,7 @@ struct nfcTagObject {
   uint8_t version;
   uint8_t folder;
   uint8_t mode;
-  uint8_t special;
+  uint8_t special; 
 };
 
 nfcTagObject myCard;
@@ -192,6 +192,7 @@ void setup() {
 
   Serial.println(F("TonUINO Version 2.0"));
   Serial.println(F("(c) Thorsten Voß"));
+  Serial.println(F("Patched by Tobias Blum (https://github.com/toblum/TonUINO) to work with the Blumbert board"));
 
   // Knöpfe mit PullUp
   pinMode(buttonPause, INPUT_PULLUP);
@@ -203,7 +204,7 @@ void setup() {
 
   // DFPlayer Mini initialisieren
   mp3.begin();
-  mp3.setVolume(28);
+  mp3.setVolume(15);
 
   // NFC Leser initialisieren
   SPI.begin();        // Init SPI bus
@@ -345,21 +346,8 @@ void loop() {
 
 int voiceMenu(int numberOfOptions, int startMessage, int messageOffset,
               bool preview = false, int previewFromFolder = 0) {
-
-  Serial.print(F("voiceMenu numberOfOptions "));
-  Serial.print(numberOfOptions);
-  Serial.print(F(" - startMessage "));
-  Serial.print(startMessage);
-  Serial.print(F(" - messageOffset "));
-  Serial.print(messageOffset);
-  Serial.print(F(" - preview "));
-  Serial.print(preview);
-  Serial.print(F(" - previewFromFolder "));
-  Serial.println(previewFromFolder);
-
   int returnValue = 0;
   if (startMessage != 0)
-    Serial.print(F("mp3.playMp3FolderTrack(startMessage) "));
     mp3.playMp3FolderTrack(startMessage);
   do {
     pauseButton.read();
