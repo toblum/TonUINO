@@ -6,7 +6,7 @@
 #include <SoftwareSerial.h>
 
 // DFPlayer Mini
-SoftwareSerial mySoftwareSerial(9, 8); // RX, TX
+SoftwareSerial mySoftwareSerial(5, 6); // RX, TX
 uint16_t numTracksInFolder;
 uint16_t currentTrack;
 
