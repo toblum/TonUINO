@@ -202,6 +202,10 @@ void setup() {
   // Busy Pin
   pinMode(busyPin, INPUT);
 
+  // Status LED
+  pinMode(A0, OUTPUT);
+  digitalWrite(A0, HIGH);
+
   // DFPlayer Mini initialisieren
   mp3.begin();
   mp3.setVolume(12);
