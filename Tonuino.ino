@@ -204,7 +204,10 @@ void setup() {
 
   // DFPlayer Mini initialisieren
   mp3.begin();
-  mp3.setVolume(15);
+  mp3.setVolume(12);
+
+  Serial.println(F("Playing startup sound (0500.mp3 in mp3 folder)"));
+  mp3.playMp3FolderTrack(500);
 
   // NFC Leser initialisieren
   SPI.begin();        // Init SPI bus
@@ -555,8 +558,7 @@ void writeCard(nfcTagObject nfcTag) {
 
   // Authenticate using key B
   Serial.println(F("Authenticating again using key B..."));
-  status = (MFRC522::StatusCode)mfrc522.PCD_Authenticate(
-      MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key, &(mfrc522.uid));
+  status = (MFRC522::StatusCode)mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_B, trailerBlock, &key, &(mfrc522.uid));
   if (status != MFRC522::STATUS_OK) {
     Serial.print(F("PCD_Authenticate() failed: "));
     Serial.println(mfrc522.GetStatusCodeName(status));
